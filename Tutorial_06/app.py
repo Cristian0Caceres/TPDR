@@ -104,7 +104,7 @@ def Img_Init():
     aImg.append(Load_Image('T09.png',True  )) # Mouse
     aImg.append(Load_Image('bkg.png',False )) # Bkg
     aImg.append(Load_Image('video.png',False )) # Video
-
+    aImg.append(Load_Image('minimapa.png',False )) # Video
 
 
     return aImg
