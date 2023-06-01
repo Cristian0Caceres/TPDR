@@ -104,7 +104,9 @@ def Img_Init():
     aImg.append(Load_Image('T09.png',True  )) # Mouse
     aImg.append(Load_Image('bkg.png',False )) # Bkg
     aImg.append(Load_Image('video.png',False )) # Video
-    aImg.append(Load_Image('mm.png',False )) #Minimapa
+    aImg.append(Load_Image('mm.png',False )) #Minimapa1
+    aImg.append(Load_Image('mm2.png',False )) #Minimapa2
+    aImg.append(Load_Image('mm3.png',False )) #Minimapa3
     return aImg
 
 #---------------------------------------------------------------------
@@ -163,7 +165,9 @@ def Pinta_Mapas():
 # Pinta Minimapa
 #---------------------------------------------------------------------
 def Pinta_Mmapa():
-    sPanta.blit(aSprt[12],(500,10))
+    sPanta.blit(aSprt[12],(855,8))
+    sPanta.blit(aSprt[13],(855,320))
+    sPanta.blit(aSprt[14],(245,245))
     return
 
 
