@@ -165,8 +165,8 @@ def Pinta_Mapas():
 # Pinta Minimapa
 #---------------------------------------------------------------------
 def Pinta_Mmapa():
-    sPanta.blit(aSprt[12],(855,8))
-    sPanta.blit(aSprt[13],(855,320))
+    sPanta.blit(aSprt[12],(820,8))
+    sPanta.blit(aSprt[13],(820,320))
     sPanta.blit(aSprt[14],(245,245))
     return
 
