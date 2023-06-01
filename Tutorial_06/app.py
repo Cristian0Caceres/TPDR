@@ -17,7 +17,8 @@ from pygame.locals import *
 #---------------------------------------------------------------------
 # Definicion de Constantes Globales
 #---------------------------------------------------------------------
-nRES = (960,640); nTW_X = nTH_Y = 32 ; nMx = nMy = 0 ; lOK = True
+nRES = (960,640); nTW_X = nTH_Y = 32 ; nMx = nMy = 0 ; lOK = True;
+xm1=0;ym1=0;xm2=0;ym2=0;xm3=0;ym3=0;nBTN_LEFT = 1
 
 #---------------------------------------------------------------------
 # Definicion de Structura
@@ -32,7 +33,6 @@ class eRobots(ct.Structure):
              ('dY',ct.c_short),
 	   ('nV',ct.c_short)
             ]
-
 #---------------------------------------------------------------------
 # Carga imagenes y convierte formato PG
 #---------------------------------------------------------------------
@@ -156,9 +156,9 @@ def Pinta_Panta():
 # Pinta Mapas
 #---------------------------------------------------------------------
 def Pinta_Mapas():
-    sPanta.blit(sMap_1.subsurface((nXd,0,597,304)),(357,5))
-    sPanta.blit(sMap_2.subsurface((0,0,345,393)),(5,241))
-    sPanta.blit(sMap_3.subsurface((0,0,597,319)),(357,315))
+    sPanta.blit(sMap_1.subsurface((xm1,ym1,597,304)),(357,5))
+    sPanta.blit(sMap_2.subsurface((xm2,ym2,345,393)),(5,241))
+    sPanta.blit(sMap_3.subsurface((xm3,ym3,597,319)),(357,315))
     return
 
 #---------------------------------------------------------------------
@@ -204,6 +204,20 @@ def Mueve(cKey):
     return
 
 #---------------------------------------------------------------------
+# update mapa_1
+#---------------------------------------------------------------------
+def UpDate_Scroll_Mapa(nMx,nMy):
+    xm1 = 0 ; ym1 = 0
+    if nMx in range(820,952):
+       if nMy in range(8,105):
+          xm1 = int(3840*(nMx-820)/float(132))#
+          ym1 = int(1920*(nMy-8)/float(97))#
+          PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm1,ym1))
+          if xm1 >= 1687: xm1 = 1687#597-3840
+          if ym1 >= 1090: ym1 = 1090#304-1920
+    return xm1,ym1
+
+#---------------------------------------------------------------------
 # While Principal del Demo.-
 #---------------------------------------------------------------------
 
@@ -239,6 +253,8 @@ while lOK:
  for e in ev:
   if e.type == QUIT           : lOK = False
   if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
+  if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
+               xm1,ym1 = UpDate_Scroll_Mapa(nMx,nMy)
 
  Pinta_Panta()
  Pinta_Mapas()
