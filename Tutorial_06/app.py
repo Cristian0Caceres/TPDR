@@ -92,7 +92,6 @@ def Get_Surface(nAncho_X,nAlto_Y):
 #---------------------------------------------------------------------
 def Img_Init():
     aImg = []
-    aImg.append(Load_Image('mm.png',False )) #Minimapa
     aImg.append(Load_Image('T00.png',False )) # Tierra
     aImg.append(Load_Image('T01.png',False )) # Tierra + Piedras
     aImg.append(Load_Image('T02.png',False )) # Rocas
@@ -105,6 +104,7 @@ def Img_Init():
     aImg.append(Load_Image('T09.png',True  )) # Mouse
     aImg.append(Load_Image('bkg.png',False )) # Bkg
     aImg.append(Load_Image('video.png',False )) # Video
+    aImg.append(Load_Image('mm.png',False )) #Minimapa
     return aImg
 
 #---------------------------------------------------------------------
@@ -163,7 +163,7 @@ def Pinta_Mapas():
 # Pinta Minimapa
 #---------------------------------------------------------------------
 def Pinta_Mmapa():
-    sPanta.blit(aSprt[0], (nRES[0] - aSprt[0].get_width(), 300,))
+    sPanta.blit(aSprt[12], (nRES[0] - aSprt[0].get_width(), 300,))
     return
 
 
