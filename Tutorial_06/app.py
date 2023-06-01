@@ -163,7 +163,7 @@ def Pinta_Mapas():
 # Pinta Minimapa
 #---------------------------------------------------------------------
 def Pinta_Mmapa():
-    sPanta.blit(aSprt[12], (nRES[0] - aSprt[0].get_width(), 300,))
+    sPanta.blit(aSprt[12],(500,10))
     return
 
 
