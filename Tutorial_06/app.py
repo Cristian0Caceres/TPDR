@@ -206,16 +206,42 @@ def Mueve(cKey):
 #---------------------------------------------------------------------
 # update mapa_1
 #---------------------------------------------------------------------
-def UpDate_Scroll_Mapa(nMx,nMy):
+def UpDate_Scroll_Mapa3(nMx,nMy):
     xm1 = 0 ; ym1 = 0
     if nMx in range(820,952):
        if nMy in range(8,105):
           xm1 = int(3840*(nMx-820)/float(132))#
           ym1 = int(1920*(nMy-8)/float(97))#
           PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm1,ym1))
-          if xm1 >= 1687: xm1 = 1687#597-3840
-          if ym1 >= 1090: ym1 = 1090#304-1920
+          if xm1 >= 3243: xm1 = 3243
+          if ym1 >= 1616: ym1 = 1616
     return xm1,ym1
+#---------------------------------------------------------------------
+# update mapa_2
+#---------------------------------------------------------------------
+def UpDate_Scroll_Mapa2(nMx,nMy):
+    xm2 = 0 ; ym2 = 0
+    if nMx in range(820,917):
+       if nMy in range(320,512):
+          xm2 = int(1920*(nMx-820)/float(132))#
+          ym2 = int(3840*(nMy-320)/float(97))#
+          PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm2,ym2))
+          if xm2 >= 1616: xm2 = 1616
+          if ym2 >= 3243: ym2 = 3243
+    return xm2,ym2
+#---------------------------------------------------------------------
+# update mapa_1
+#---------------------------------------------------------------------
+def UpDate_Scroll_Mapa(nMx,nMy):
+    xm3 = 0 ; ym3 = 0
+    if nMx in range(820,952):
+       if nMy in range(8,105):
+          xm3 = int(3840*(nMx-820)/float(132))#
+          ym3 = int(1920*(nMy-8)/float(97))#
+          PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm3,ym3))
+          if xm3 >= 1687: xm3 = 1687#597-3840
+          if ym3 >= 1090: ym3 = 1090#304-1920
+    return xm3,ym3
 
 #---------------------------------------------------------------------
 # While Principal del Demo.-
@@ -255,6 +281,8 @@ while lOK:
   if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
   if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
                xm1,ym1 = UpDate_Scroll_Mapa(nMx,nMy)
+               xm2,ym2 = UpDate_Scroll_Mapa2(nMx,nMy)
+               #xm1,ym1 = UpDate_Scroll_Mapa3(nMx,nMy)
 
  Pinta_Panta()
  Pinta_Mapas()
