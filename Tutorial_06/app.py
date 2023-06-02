@@ -18,7 +18,7 @@ from pygame.locals import *
 # Definicion de Constantes Globales
 #---------------------------------------------------------------------
 nRES = (960,640); nTW_X = nTH_Y = 32 ; nMx = nMy = 0 ; lOK = True;
-xm1=0;ym1=0;xm2=0;ym2=0;xm3=0;ym3=0;nBTN_LEFT = 1
+xm1=0;ym1=0;xm2=0;ym2=0;xm3=0;ym3=0;nBTN_LEFT = 1#establesemos las variables gobales entre ellas xm y ym los cuales corresonden a las posisiones en x e y en los mapas 1 2 3 y para identificar a que mapa corresponden se les pone el numero del mapa correspondiente
 
 #---------------------------------------------------------------------
 # Definicion de Structura
@@ -208,41 +208,40 @@ def Mueve(cKey):
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa(nMx,nMy):
     xm1 = 0 ; ym1 = 0
-    if nMx in range(820,952):
-       if nMy in range(8,105):
-          xm1 = int(3840*(nMx-820)/float(132))#
-          ym1 = int(1920*(nMy-8)/float(97))#
+    if nMx in range(820,952): # Si nMx esta en el rango de 820 a 952
+       if nMy in range(8,105): # y nMy esta en el rango de 8 a 105
+          xm1 = int(3840*(nMx-820)/float(132)) # Calcula la coordenada x del mapa
+          ym1 = int(1920*(nMy-8)/float(97)) # Calcula la coordenada y del mapa
           PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm1,ym1))
-          if xm1 >= 3243: xm1 = 3243
-          if ym1 >= 1616: ym1 = 1616
-    return xm1,ym1
+          if xm1 >= 3243: xm1 = 3243 # Si xm1 es mayor o igual a 3243, establece xm1 en 3243
+          if ym1 >= 1616: ym1 = 1616 # Si ym1 es mayor o igual a 1616, establece ym1 en 1616
+    return xm1,ym1  # Devuelve las coordenadas del mapa
 #---------------------------------------------------------------------
 # update mapa_2
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa2(nMx,nMy):
     xm2 = 0 ; ym2 = 0
-    if nMx in range(245,345):
-       if nMy in range(245,437):
-          xm2 = int(1920*(nMx-245)/float(97))#
-          ym2 = int(3840*(nMy-245)/float(160))#
+    if nMx in range(245,345):# Verificar si nMx esta en el rango de 245 a 345
+       if nMy in range(245,437):# Verificar si nMy esta en el rango de 245 a 437
+          xm2 = int(1920*(nMx-245)/float(97))# Calcular xm2 e ym2
+          ym2 = int(1920*(nMy-245)/float(160))
           PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm2,ym2))
-          if xm2 >= 1616: xm2 = 1616
-          if ym2 >= 3243: ym2 = 3243
-    return xm2,ym2
+          if xm2 >= 1616: xm2 = 1616# Si xm2 es mayor o igual a 1616, establecer xm2 en 1616
+          if ym2 >= 1616: ym2 = 1616# Si ym2 es mayor o igual a 1616, establecer ym2 en 1616
+    return xm2,ym2# Devolver los valores de xm2 e ym2
 #---------------------------------------------------------------------
-# update mapa_1
+# update mapa_3
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa3(nMx,nMy):
-    xm3 = 0 ; ym3 = 0
-    if nMx in range(820,952):
-       if nMy in range(8,105):
-          xm3 = int(3840*(nMx-820)/float(132))#
-          ym3 = int(1920*(nMy-8)/float(97))#
+    xm3 = 0 ; ym3 = 0  # Inicializa las variables xm3 e ym3 en cero.
+    if nMx in range(820,917):  # Si nMx esta en el rango de 820 a 917:
+        if nMy in range(320,512):  # Si nMy esta en el rango de 320 a 512:
+          xm3 = int(1920*(nMx-820)/float(132))  # Calcula xm3.
+          ym3 = int(3840*(nMy-320)/float(97))  # Calcula ym3.
           PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm3,ym3))
-          if xm3 >= 1687: xm3 = 1687#597-3840
-          if ym3 >= 1090: ym3 = 1090#304-1920
-    return xm3,ym3
-
+          if xm3 >= 3243: xm3 = 3243# Si xm3 es mayor o igual a 3243 Establece xm3 en 3243.
+          if ym3 >= 1601: ym3 = 1601# Si ym3 es mayor o igual a 1601 Establece ym3 en 1601.
+    return xm3,ym3# Devuelve los valores de xm3 e ym3.
 #---------------------------------------------------------------------
 # While Principal del Demo.-
 #---------------------------------------------------------------------
@@ -282,7 +281,7 @@ while lOK:
   if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
                xm1,ym1 = UpDate_Scroll_Mapa(nMx,nMy)
                xm2,ym2 = UpDate_Scroll_Mapa2(nMx,nMy)
-               #xm1,ym1 = UpDate_Scroll_Mapa3(nMx,nMy)
+               xm3,ym3 = UpDate_Scroll_Mapa3(nMx,nMy)
 
  Pinta_Panta()
  Pinta_Mapas()
