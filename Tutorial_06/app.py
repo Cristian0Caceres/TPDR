@@ -167,7 +167,7 @@ def Pinta_Mapas():
 def Pinta_Mmapa():
     sPanta.blit(aSprt[12],(820,8))
     sPanta.blit(aSprt[13],(820,320))
-    sPanta.blit(aSprt[14],(245,245))
+    sPanta.blit(aSprt[14],(244,244))
     return
 
 
@@ -206,7 +206,7 @@ def Mueve(cKey):
 #---------------------------------------------------------------------
 # update mapa_1
 #---------------------------------------------------------------------
-def UpDate_Scroll_Mapa3(nMx,nMy):
+def UpDate_Scroll_Mapa(nMx,nMy):
     xm1 = 0 ; ym1 = 0
     if nMx in range(820,952):
        if nMy in range(8,105):
@@ -220,19 +220,19 @@ def UpDate_Scroll_Mapa3(nMx,nMy):
 # update mapa_2
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa2(nMx,nMy):
-    xm2 = 0 ; ym2 = 0
-    if nMx in range(820,917):
-       if nMy in range(320,512):
-          xm2 = int(1920*(nMx-820)/float(132))#
-          ym2 = int(3840*(nMy-320)/float(97))#
-          PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm2,ym2))
-          if xm2 >= 1616: xm2 = 1616
-          if ym2 >= 3243: ym2 = 3243
-    return xm2,ym2
+    xm3 = 0 ; ym3 = 0
+    if nMx in range(245,345):
+       if nMy in range(245,437):
+          xm3 = int(1920*(nMx-245)/float(97))#
+          ym3 = int(3840*(nMy-245)/float(160))#
+          PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm3,ym3))
+          if xm3 >= 1616: xm3 = 1616
+          if ym3 >= 3243: ym3 = 3243
+    return xm3,ym3
 #---------------------------------------------------------------------
 # update mapa_1
 #---------------------------------------------------------------------
-def UpDate_Scroll_Mapa(nMx,nMy):
+def UpDate_Scroll_Mapa3(nMx,nMy):
     xm3 = 0 ; ym3 = 0
     if nMx in range(820,952):
        if nMy in range(8,105):
