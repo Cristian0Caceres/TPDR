@@ -91,7 +91,7 @@ def Get_Surface(nAncho_X,nAlto_Y):
 # Inicializa Array de Sprites.-
 #---------------------------------------------------------------------
 def Img_Init():
-    aImg = []
+    aImg = []#esta lista almacena las imagenes que se cargan abajo
     aImg.append(Load_Image('T00.png',False )) # Tierra
     aImg.append(Load_Image('T01.png',False )) # Tierra + Piedras
     aImg.append(Load_Image('T02.png',False )) # Rocas
@@ -104,9 +104,9 @@ def Img_Init():
     aImg.append(Load_Image('T09.png',True  )) # Mouse
     aImg.append(Load_Image('bkg.png',False )) # Bkg
     aImg.append(Load_Image('video.png',False )) # Video
-    aImg.append(Load_Image('mm.png',False )) #Minimapa1
-    aImg.append(Load_Image('mm2.png',False )) #Minimapa2
-    aImg.append(Load_Image('mm3.png',False )) #Minimapa3
+    aImg.append(Load_Image('mm.png',False )) #Minimapa1 (esta imagen corresponde a la que usamos en el minimapa 1 esto nos permitira cargarla en pantalla mas adelante)
+    aImg.append(Load_Image('mm3.png',False )) #Minimapa2(esta imagen corresponde a la que usamos en el minimapa 2 esto nos permitira cargarla en pantalla mas adelante)
+    aImg.append(Load_Image('mm2.png',False )) #Minimapa3(esta imagen corresponde a la que usamos en el minimapa 3 esto nos permitira cargarla en pantalla mas adelante)
     return aImg
 
 #---------------------------------------------------------------------
@@ -165,9 +165,9 @@ def Pinta_Mapas():
 # Pinta Minimapa
 #---------------------------------------------------------------------
 def Pinta_Mmapa():
-    sPanta.blit(aSprt[12],(820,8))
-    sPanta.blit(aSprt[13],(820,320))
-    sPanta.blit(aSprt[14],(244,244))
+    sPanta.blit(aSprt[12],(820,8))#pintamos en su posision los minimapas esto usando su posision en la lista  que almacena las imagenes
+    sPanta.blit(aSprt[13],(820,320))#los minimapas 1 y 3 estan a la misma distancia x en el display por lo que estos solo difieren en la posision de y siendo que el minimapa 3 esta mas abajo que el 1
+    sPanta.blit(aSprt[14],(244,244))#los minimapas 1 y 3 son distintos a el mini mapa 2 en su forma y posision por ende al calcular la posision que usara valorres distintos
     return
 
 
@@ -220,15 +220,15 @@ def UpDate_Scroll_Mapa(nMx,nMy):
 # update mapa_2
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa2(nMx,nMy):
-    xm3 = 0 ; ym3 = 0
+    xm2 = 0 ; ym2 = 0
     if nMx in range(245,345):
        if nMy in range(245,437):
-          xm3 = int(1920*(nMx-245)/float(97))#
-          ym3 = int(3840*(nMy-245)/float(160))#
-          PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm3,ym3))
-          if xm3 >= 1616: xm3 = 1616
-          if ym3 >= 3243: ym3 = 3243
-    return xm3,ym3
+          xm2 = int(1920*(nMx-245)/float(97))#
+          ym2 = int(3840*(nMy-245)/float(160))#
+          PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm2,ym2))
+          if xm2 >= 1616: xm2 = 1616
+          if ym2 >= 3243: ym2 = 3243
+    return xm2,ym2
 #---------------------------------------------------------------------
 # update mapa_1
 #---------------------------------------------------------------------
