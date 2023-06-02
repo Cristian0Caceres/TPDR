@@ -207,7 +207,7 @@ def Mueve(cKey):
 # update mapa_1
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa(nMx,nMy):
-    xm1 = 0 ; ym1 = 0
+    global xm1 , ym1
     if nMx in range(820,952): # Si nMx esta en el rango de 820 a 952
        if nMy in range(8,105): # y nMy esta en el rango de 8 a 105
           xm1 = int(3840*(nMx-820)/float(132)) # Calcula la coordenada x del mapa
@@ -220,7 +220,7 @@ def UpDate_Scroll_Mapa(nMx,nMy):
 # update mapa_2
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa2(nMx,nMy):
-    xm2 = 0 ; ym2 = 0
+    global xm2 , ym2
     if nMx in range(245,345):# Verificar si nMx esta en el rango de 245 a 345
        if nMy in range(245,437):# Verificar si nMy esta en el rango de 245 a 437
           xm2 = int(1920*(nMx-245)/float(97))# Calcular xm2 e ym2
@@ -233,7 +233,7 @@ def UpDate_Scroll_Mapa2(nMx,nMy):
 # update mapa_3
 #---------------------------------------------------------------------
 def UpDate_Scroll_Mapa3(nMx,nMy):
-    xm3 = 0 ; ym3 = 0  # Inicializa las variables xm3 e ym3 en cero.
+    global xm3 , ym3
     if nMx in range(820,917):  # Si nMx esta en el rango de 820 a 917:
         if nMy in range(320,512):  # Si nMy esta en el rango de 320 a 512:
           xm3 = int(1920*(nMx-820)/float(132))  # Calcula xm3.
