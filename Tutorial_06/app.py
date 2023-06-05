@@ -216,33 +216,10 @@ def UpDate_Scroll_Mapa(nMx,nMy):
           if xm1 >= 3243: xm1 = 3243 # Si xm1 es mayor o igual a 3243, establece xm1 en 3243
           if ym1 >= 1616: ym1 = 1616 # Si ym1 es mayor o igual a 1616, establece ym1 en 1616
     return xm1,ym1  # Devuelve las coordenadas del mapa
-def UpDate_Scroll_Mapa_1(nMx,nMy): #Definir los parametros (nMx y nMy) de la posicion en X e Y del cursor
-
-    #Inicializar las coordenadas X e Y del Mini Mapa 1 como variables globales
-    global xd1 , yd1
-
-    #Verificar si el cursor esta dentro de los limites del Mini Mapa 1
-    if nMx in range(755,947):
-       if nMy in range(12,108):
-
-          #Calcular las coordenadas correspondientes en el Mini Mapa 1
-          xd1 = int(3840*(nMx-755)/float(192)) #calcula la posicion en el eje X del area visible del mapa 1 en funcion de la posicion
-          yd1 = int(1920*(nMy-12)/float(96))   #calcula la posicion en el eje Y del area visible del mapa 1 en funcion de la posicion
-
-          #Actualizar el titulo de la ventana con las coordenadas del Mini Mapa 1
-          PG.display.set_caption('[Coord Mapa_1]-> X: %d - Y: %d' %(xd1,yd1))
-
-          #Limitar las coordenadas maximas permitidas en el Mini Mapa 1 en X e Y
-          if xd1 >= 3243: xd1 = 3243
-          if yd1 >= 1616: yd1 = 1616
-
-    #Devolver las coordenadas actualizadas del mapa 1
-    return xd1,yd1
-
 #---------------------------------------------------------------------
 # Update Mini_Mapa_2
 #---------------------------------------------------------------------
-def UpDate_Scroll_Mapa_2(nMx,nMy): #Definir los parametros (nMx y nMy) de la posicion en X e Y del cursor
+def UpDate_Scroll_Mapa2(nMx,nMy): #Definir los parametros (nMx y nMy) de la posicion en X e Y del cursor
     #Inicializar la coordenada X e Y del Mini Mapa 2 como variables globales
     global xm2 , ym2
     #Verificar si el cursor esta dentro de los limites del Mini Mapa 2
@@ -252,7 +229,7 @@ def UpDate_Scroll_Mapa_2(nMx,nMy): #Definir los parametros (nMx y nMy) de la pos
           xm2 = int(1920*(nMx-247)/float(96)) #calcula la posicion en el eje X del area visible del mapa 2 en funcion de la posicion
           ym2 = int(3200*(nMy-248)/float(160))#calcula la posicion en el eje Y del area visible del mapa 2 en funcion de la posicion
           #Actualizar el titulo de la ventana con las coordenadas del Mini Mapa 2
-          PG.display.set_caption('[Coord Mapa_2]-> X: %d - Y: %d' %(xd2,yd2))
+          PG.display.set_caption('[Coord Mapa_2]-> X: %d - Y: %d' %(xm2,ym2))
           #Limitar las coordenadas maximas permitidas en el Mini Mapa 2 en X e Y
           if xm2 >= 1575 : xm2 = 1575
           if ym2 >= 2807 : ym2 = 2807
@@ -262,7 +239,7 @@ def UpDate_Scroll_Mapa_2(nMx,nMy): #Definir los parametros (nMx y nMy) de la pos
 #---------------------------------------------------------------------
 # Update Mini_Mapa_3
 #---------------------------------------------------------------------
-def UpDate_Scroll_Mapa_3(nMx,nMy): #Definir los parametros (nMx y nMy) de la posicion en X e Y del cursor
+def UpDate_Scroll_Mapa3(nMx,nMy): #Definir los parametros (nMx y nMy) de la posicion en X e Y del cursor
 
     #Inicializar la coordenada X e Y del Mini Mapa 3 como variables globales
     global xm3 , ym3
