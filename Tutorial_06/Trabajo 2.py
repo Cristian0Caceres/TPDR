@@ -18,7 +18,7 @@ from pygame.locals import *
 # Definicion de Constantes Globales
 #---------------------------------------------------------------------
 nRES = (960,640); nTW_X = nTH_Y = 32 ; nMx = nMy = 0 ; lOK = True;
-xm1=0;ym1=0;xm2=0;ym2=0;xm3=0;ym3=0;nBTN_LEFT = 1#establesemos las variables gobales entre ellas xm y ym los cuales corresonden a las posisiones en x e y en los mapas 1 2 3 y para identificar a que mapa corresponden se les pone el numero del mapa correspondiente
+xm1=0;ym1=0;xm2=0;ym2=0;xm3=0;ym3=0;nBTN_LEFT = 1#establecemos las variables gobales entre ellas xm y ym los cuales corresonden a las posiciones en x e y en los mapas 1 2 3. Para identificar a que mapa corresponden, se les pone el numero del mapa correspondiente
 
 #---------------------------------------------------------------------
 # Definicion de Structura
@@ -90,7 +90,7 @@ def Get_Surface(nAncho_X,nAlto_Y):
 #---------------------------------------------------------------------
 # Inicializa Array de Sprites.-
 #---------------------------------------------------------------------
-def Img_Init():
+def Img_Init():#Funcion encargada de pintar las imagenes en la simulacion
     aImg = []#esta lista almacena las imagenes que se cargan abajo
     aImg.append(Load_Image('T00.png',False )) # Tierra
     aImg.append(Load_Image('T01.png',False )) # Tierra + Piedras
@@ -164,10 +164,10 @@ def Pinta_Mapas():
 #---------------------------------------------------------------------
 # Pinta Minimapa
 #---------------------------------------------------------------------
-def Pinta_Mmapa():
-    sPanta.blit(aSprt[12],(755,7))#pintamos en su posision los minimapas esto usando su posision en la lista  que almacena las imagenes
-    sPanta.blit(aSprt[13],(247,248))#los minimapas 1 y 3 estan a la misma distancia x en el display por lo que estos solo difieren en la posision de y siendo que el minimapa 3 esta mas abajo que el 1
-    sPanta.blit(aSprt[14],(851,322))#los minimapas 1 y 3 son distintos a el mini mapa 2 en su forma y posision por ende al calcular la posision que usara valorres distintos
+def Pinta_Mmapa():#Funcion que nos permite cargar los mini mapas en los mapas mas grandes
+    sPanta.blit(aSprt[12],(755,7))#sPanta.blit pinta en su posision los minimapas esto usando su posision en la lista  en la cual se almacenan las imagenes
+    sPanta.blit(aSprt[13],(247,248))#Los minimapas 1 y 3 estan a la misma distancia de x en el display. Estos solo difieren en la posision de y, siendo que el minimapa 3 esta mas abajo que el 1
+    sPanta.blit(aSprt[14],(851,322))#Los minimapas 1 y 3 son distintos a el mini mapa 2 en su forma y posicion por ende se debe calcular su posicion
     return
 
 
@@ -206,59 +206,59 @@ def Mueve(cKey):
 #---------------------------------------------------------------------
 # update mapa_1
 #---------------------------------------------------------------------
+#Esta funcion define los parametros(nMx y nMy) de la posicion en X e Y del cursor
 def UpDate_Scroll_Mapa(nMx,nMy):
+    #Inicializar la coordenada X e Y del Mini Mapa 2 como variables globales
     global xm1 , ym1
+    #Verificar si el cursor esta dentro de los limites del Mini Mapa
     if nMx in range(755,957): # Si nMx esta en el rango de 755 a 957
        if nMy in range(7,104): # y nMy esta en el rango de 7 a 104
           xm1 = int(3840*(nMx-755)/float(192)) # Calcula la coordenada x del mapa
           ym1 = int(1920*(nMy-7)/float(96)) # Calcula la coordenada y del mapa
+          #Actualizar el titulo de la ventana con las coordenadas del Mini Mapa
           PG.display.set_caption('[Coord Mapa]-> X: %d1 - Y: %d1' %(xm1,ym1))
-          if xm1 >= 3243: xm1 = 3243 # Si xm1 es mayor o igual a 3243, establece xm1 en 3243
-          if ym1 >= 1616: ym1 = 1616 # Si ym1 es mayor o igual a 1616, establece ym1 en 1616
+          if xm1 >= 3243: xm1 = 3243 #Se calcula la posicion en el eje X del area visible del mapa 2 en funcion de la posicion
+          if ym1 >= 1616: ym1 = 1616 #Se calcula la posicion en el eje Y del area visible del mapa 2 en funcion de la posicion
     return xm1,ym1  # Devuelve las coordenadas del mapa
 #---------------------------------------------------------------------
 # Update Mini_Mapa_2
 #---------------------------------------------------------------------
-def UpDate_Scroll_Mapa2(nMx,nMy): #Definir los parametros (nMx y nMy) de la posicion en X e Y del cursor
+#Esta funcion define los parametros(nMx y nMy) de la posicion en X e Y del cursor
+def UpDate_Scroll_Mapa2(nMx,nMy):
     #Inicializar la coordenada X e Y del Mini Mapa 2 como variables globales
     global xm2 , ym2
     #Verificar si el cursor esta dentro de los limites del Mini Mapa 2
-    if nMx in range(247,343):
-       if nMy in range(248,408):
-          #Calcular las coordenadas correspondientes en el Mini Mapa 2
-          xm2 = int(1920*(nMx-247)/float(96)) #calcula la posicion en el eje X del area visible del mapa 2 en funcion de la posicion
-          ym2 = int(3200*(nMy-248)/float(160))#calcula la posicion en el eje Y del area visible del mapa 2 en funcion de la posicion
-          #Actualizar el titulo de la ventana con las coordenadas del Mini Mapa 2
+    if nMx in range(247,343):#Si nMx esta en el rango de 247 a 343.
+       if nMy in range(248,408):#Si nMy esta en el rango de 248 a 408
+          #Entonces calcula las coordenadas correspondientes en el Mini Mapa 2
+          xm2 = int(1920*(nMx-247)/float(96))#Calcula la coordenada x del mapa
+          ym2 = int(3200*(nMy-248)/float(160))#Calcula la coordenada y del mapa
+          #Actualizar el titulo de la ventana con las coordenadas del Mini Mapa
           PG.display.set_caption('[Coord Mapa_2]-> X: %d - Y: %d' %(xm2,ym2))
           #Limitar las coordenadas maximas permitidas en el Mini Mapa 2 en X e Y
-          if xm2 >= 1575 : xm2 = 1575
-          if ym2 >= 2807 : ym2 = 2807
+          if xm2 >= 1575 : xm2 = 1575#Se calcula la posicion en el eje X del area visible del mapa 2 en funcion de la posicion
+          if ym2 >= 2807 : ym2 = 2807#Se calcula la posicion en el eje Y del area visible del mapa 2 en funcion de la posicion
     #Devolver las coordenadas actualizadas del mapa 2
     return xm2,ym2
 
 #---------------------------------------------------------------------
 # Update Mini_Mapa_3
 #---------------------------------------------------------------------
-def UpDate_Scroll_Mapa3(nMx,nMy): #Definir los parametros (nMx y nMy) de la posicion en X e Y del cursor
-
+#Esta funcion define los parametros (nMx y nMy) de la posicion en X e Y del cursor
+def UpDate_Scroll_Mapa3(nMx,nMy):
     #Inicializar la coordenada X e Y del Mini Mapa 3 como variables globales
     global xm3 , ym3
-
     #Verificar si el cursor esta dentro de los limites del Mini Mapa 3
-    if nMx in range(851,947):
-       if nMy in range(322,418):
-
+    if nMx in range(851,947):#Si nMx esta en el rango de 851 a 947.
+       if nMy in range(322,418):#Si nMy esta en el rango de 322 a 418
           #Calcular las coordenadas correspondientes en el Mini Mapa 3
           xm3 = int(1920*(nMx-851)/float(96)) #calcula la posicion en el eje X del area visible del mapa 3 en funcion de la posicion
           ym3 = int(1920*(nMy-322)/float(96)) #calcula la posicion en el eje Y del area visible del mapa 3 en funcion de la posicion
-
           #Actualizar el titulo de la ventana con las coordenadas del Mini Mapa 3
           PG.display.set_caption('[Coord Mapa_3]-> X: %d - Y: %d' %(xm3,ym3))
-
           #Limitar las coordenadas maximas permitidas en el Mini Mapa 3 en X e Y
-          if xm3 >=  1323 : xm3 = 1323
-          if ym3 >= 1601 : ym3 = 1601
-
+          if xm3 >=  1323 : xm3 = 1323#Se calcula la posicion en el eje X del area visible del mapa 3 en funcion de la posicion
+          if ym3 >= 1601 : ym3 = 1601#Se calcula la posicion en el eje Y del area visible del mapa 3 en funcion de la posicion
     #Devolver las coordenadas actualizadas del mapa 3
     return xm3,ym3
 #---------------------------------------------------------------------
