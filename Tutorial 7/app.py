@@ -18,7 +18,7 @@ from pygame.locals import *
 # Definicion de Constantes y Variables
 #---------------------------------------------------------------------
 nRES = (1184,576); nT_WX = nT_HY = 32 ; nMAX_ROBOTS = 01 ; lGo = True
-nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32;nBTN_LEFT = 1;nBTN_RIGHT = 2
+nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32;nBTN_LEFT = 1;nBTN_RIGHT = 3
 
 #---------------------------------------------------------------------
 # Definicion Structura Robots
