@@ -18,7 +18,7 @@ from pygame.locals import *
 # Definicion de Constantes y Variables
 #---------------------------------------------------------------------
 nRES = (1184,576); nT_WX = nT_HY = 32 ; nMAX_ROBOTS = 01 ; lGo = True
-nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32
+nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32;nBTN_LEFT = 1;nBTN_RIGHT = 2
 
 #---------------------------------------------------------------------
 # Definicion Structura Robots
@@ -310,7 +310,10 @@ while lGo:
  for e in ev:
   if e.type == QUIT           : lGo = (2 > 3)
   if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
-
+  if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
+               print("test")
+  if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
+               print("tset")
  Pinta_Mapa()
  Pinta_Robot()
  Mueve_Robot()
