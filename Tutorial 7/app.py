@@ -311,9 +311,9 @@ while lGo:
   if e.type == QUIT           : lGo = (2 > 3)
   if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
   if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
-               print("test")
+               print("izquierdo")
   if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
-               print("tset")
+               print("derecho")
  Pinta_Mapa()
  Pinta_Robot()
  Mueve_Robot()
