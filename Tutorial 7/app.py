@@ -271,6 +271,7 @@ def Cambio_inicio_Robot(position):
     for i in range(0, nMAX_ROBOTS):
         aBoe[i].nX = position[0]
         aBoe[i].nY = position[1]
+    return
 #--------------------------------------------------------------
 # SaveData -> Graba todos los datos a un archivo binario
 #--------------------------------------------------------------
@@ -316,8 +317,8 @@ while lGo:
     if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
     if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
          print("izquierdo")
-         cell_x = int(e.pos[0] / Tc) * Tc + Tc /2
-         cell_y = int(e.pos[1] / Tc) * Tc + Tc / 2
+         cell_x = int(e.pos[0] / Tc) * Tc + Tc /13
+         cell_y = int(e.pos[1] / Tc) * Tc + Tc / 13
          Cambio_inicio_Robot((cell_x, cell_y))
     if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
          print("derecho")
