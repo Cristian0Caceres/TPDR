@@ -18,7 +18,8 @@ from pygame.locals import *
 # Definicion de Constantes y Variables
 #---------------------------------------------------------------------
 nRES = (1184,576); nT_WX = nT_HY = 32 ; nMAX_ROBOTS = 01 ; lGo = True
-nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32;nBTN_LEFT = 1;nBTN_RIGHT = 3
+nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32;nBTN_LEFT = 1;nBTN_RIGHT = 3;Tc=32
+
 
 #---------------------------------------------------------------------
 # Definicion Structura Robots
@@ -266,7 +267,10 @@ def Pausa():
      e = PG.event.wait()
      if e.type in (PG.QUIT, PG.KEYDOWN):
         return
-
+def Cambio_inicio_Robot(position):
+    for i in range(0, nMAX_ROBOTS):
+        aBoe[i].nX = position[0]
+        aBoe[i].nY = position[1]
 #--------------------------------------------------------------
 # SaveData -> Graba todos los datos a un archivo binario
 #--------------------------------------------------------------
@@ -308,15 +312,18 @@ while lGo:
 
  ev = PG.event.get()
  for e in ev:
-  if e.type == QUIT           : lGo = (2 > 3)
-  if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
-  if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
-               print("izquierdo")
-  if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
-               print("derecho")
+    if e.type == QUIT           : lGo = (2 > 3)
+    if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
+    if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
+         print("izquierdo")
+         cell_x = int(e.pos[0] / Tc) * Tc + Tc /2
+         cell_y = int(e.pos[1] / Tc) * Tc + Tc / 2
+         Cambio_inicio_Robot((cell_x, cell_y))
+    if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
+         print("derecho")
  Pinta_Mapa()
  Pinta_Robot()
- Mueve_Robot()
+ #Mueve_Robot()
  Pinta_Mouse()
  PG.display.flip()
  aClk[0].tick(100)
