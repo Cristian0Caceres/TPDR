@@ -11,16 +11,16 @@
 # |____|_  /\____/|___  /\____/|__| |__|\___  >____  /
 #        \/           \/                    \/     \/
 #---------------------------------------------------------------------
-import pygame as PG, time as Ti, random as RA, ctypes as CT
+import pygame as PG, time as Ti, random as RA, ctypes as CT, matplotlib as MT
 from pygame.locals import *
 
 #---------------------------------------------------------------------
 # Definicion de Constantes y Variables
 #---------------------------------------------------------------------
 nRES = (1184,576); nT_WX = nT_HY = 32 ; nMAX_ROBOTS = 01 ; lGo = True
-nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32;nBTN_LEFT = 1;nBTN_RIGHT = 3;Tc=32
-
-
+nMx  = 0 ; nMy = 0 ; nR_1 = 1154 ; nR_2 = 32 ; nBTN_LEFT = 1
+nBTN_RIGHT = 3 ; xd = -1 ; yd = -1 ; xd2 = -1 ; yd2 = -1
+coordenadas = {}
 #---------------------------------------------------------------------
 # Definicion Structura Robots
 #---------------------------------------------------------------------
@@ -92,23 +92,6 @@ def Init_Robot():
      aBoe[i].nV = 1
      aBoe[i].nC = 1
     return
-
-#---------------------------------------------------------------------
-# Inicilaiza parametros de los Robots
-#---------------------------------------------------------------------
-def Init_Robot_Random():
-    for i in range(0,nMAX_ROBOTS):
-     aBoe[i].nF = 1 # Robot Tipo 0
-     aBoe[i].nX = (RA.randint(0,nRES[0] - nT_WX) / nT_WX) * nT_WX
-     aBoe[i].nY = (RA.randint(0,nRES[1] - nT_HY) / nT_HY) * nT_HY
-     aBoe[i].nR = nR_1 - aBoe[i].nX
-     aBoe[i].nS = 1 # Switch por defecto
-     aBoe[i].dX = 1 # Por defecto robot Direccion Este.-
-     aBoe[i].dY = 0
-     aBoe[i].nV = 1
-     aBoe[i].nC = 1
-    return
-
 #---------------------------------------------------------------------
 # Inicializa Array de Sprites.-
 #---------------------------------------------------------------------
@@ -118,7 +101,7 @@ def Init_Fig():
     aImg.append(Load_Image('T02.png',False )) # Tile Roca,   id = 1
     aImg.append(Load_Image('T03.png',False )) # Tile Marmol, id = 2
     aImg.append(Load_Image('Bo1.png',True  )) # Robot 1      id = 3
-    aImg.append(Load_Image('Bo2.png',True  )) # Robot 2      id = 4
+    aImg.append(Load_Image('Pun.png',True  )) # puntero      id = 4
     aImg.append(Load_Image('Bo3.png',True  )) # Robot 3      id = 5
     aImg.append(Load_Image('Bo4.png',True  )) # Robot 4      id = 6
     aImg.append(Load_Image('Bo5.png',True  )) # Robot 5      id = 7
@@ -200,64 +183,70 @@ def Clear_Mapa(nVal):
     return                   # Activamos con UNO
 
 #---------------------------------------------------------------------
-# Pinta los Robots en el Super Extra Mega Mapa.-
-# Se pintan los Robots en Surface -> sMapa (6400 x 480)
-#---------------------------------------------------------------------
-def Pinta_Robot():
-    for i in range(0,nMAX_ROBOTS): # Iteramos las 8 Figuras del Robot
-     if aBoe[i].nF == 1: sWin.blit(aFig[3] ,(aBoe[i].nX,aBoe[i].nY))
-     if aBoe[i].nF == 2: sWin.blit(aFig[4] ,(aBoe[i].nX,aBoe[i].nY))
-     if aBoe[i].nF == 3: sWin.blit(aFig[5] ,(aBoe[i].nX,aBoe[i].nY))
-     if aBoe[i].nF == 4: sWin.blit(aFig[6] ,(aBoe[i].nX,aBoe[i].nY))
-     if aBoe[i].nF == 5: sWin.blit(aFig[7] ,(aBoe[i].nX,aBoe[i].nY))
-     if aBoe[i].nF == 6: sWin.blit(aFig[8] ,(aBoe[i].nX,aBoe[i].nY))
-     if aBoe[i].nF == 7: sWin.blit(aFig[9] ,(aBoe[i].nX,aBoe[i].nY))
-     if aBoe[i].nF == 8: sWin.blit(aFig[10],(aBoe[i].nX,aBoe[i].nY))
-    return
-
-#---------------------------------------------------------------------
-# Actualiza la estructura de datos de cada uno de los robots dentro del
-# Mapa sMapa.
-#---------------------------------------------------------------------
-def Mueve_Robot():
-    for i in range(0,nMAX_ROBOTS): # Recorrimos todos los Robots
-     aBoe[i].nR -= 1      # Decrementamos en 1 el Rango del Robot
-     if aBoe[i].nR <= 0:   # Robot termino sus pasos?
-        if aBoe[i].nS == 1:
-           aBoe[i].nS = 2  # Cambio de estado
-           aBoe[i].nR = nR_2 # Robot baja nR_2 pasos
-           aBoe[i].dX = 0 ; aBoe[i].dY = 1
-        elif aBoe[i].nS == 2:
-             aBoe[i].nS = 3  # Cambio de estado
-             aBoe[i].nR = nR_1 # Robot OEste nR_1 pasos
-             aBoe[i].dX = -1 ; aBoe[i].dY = 0
-        elif aBoe[i].nS == 3:
-             aBoe[i].nS = 4  # Cambio de estado
-             aBoe[i].nR = nR_2 # Robot baja nR_2 pasos
-             aBoe[i].dX = 0 ; aBoe[i].dY = 1
-        else:
-             aBoe[i].nS = 1  # Cambio de estado
-             aBoe[i].nR = nR_1 # Robot Este nR_1 pasos
-             aBoe[i].dX = 1 ; aBoe[i].dY = 0
-     #Actualizamos (Xs,Ys) de los Sprites en el Mapa 2D
-     #--------------------------------------------------
-     aBoe[i].nX += aBoe[i].dX*aBoe[i].nV # Posicion Robot[i] en eje X
-     aBoe[i].nY += aBoe[i].dY*aBoe[i].nV # Posicion Robot[i] en eje Y
-     aBoe[i].nC += 1
-     if aBoe[i].nC >= 20:
-        aBoe[i].nC = 1
-        aBoe[i].nF += 1
-        if aBoe[i].nF == 9:
-           aBoe[i].nF = 1
-     if aBoe[i].nX < 1 and aBoe[i].nY == 544: Init_Robot()
-    return
-
-#---------------------------------------------------------------------
 # Pinta Mouse
 #---------------------------------------------------------------------
 def Pinta_Mouse():
     sWin.blit(aFig[11],(nMx,nMy))
     return
+#---------------------------------------------------------------------
+# actualiza coordenadas click izquierdo y derecho del mouse
+#---------------------------------------------------------------------
+def Mov_Der(nMx,nMy):
+    xd = 0 ; yd = 0
+
+    xd = (nMx / nT_WX) * nT_WX
+    yd = (nMy / nT_HY) * nT_HY
+    return xd, yd
+#---------------------------------------------------------------------
+def Mov_Izq(nMx,nMy):
+    xd2 = 0 ; yd2 = 0
+
+    xd2 = (nMx / nT_WX) * nT_WX
+    yd2 = (nMy / nT_HY) * nT_HY
+    return xd2, yd2
+#---------------------------------------------------------------------
+# Pinta Robot
+#---------------------------------------------------------------------
+def Pinta_Robot(xd, yd):
+    if xd >= 0 or yd >= 0:
+        sWin.blit(aFig[3],(xd,yd))
+    return
+#---------------------------------------------------------------------
+# Mueve Robot
+#---------------------------------------------------------------------
+def Mueve_Robot():
+    global xd, xd2, yd, yd2
+    if xd2 > 0 or yd2 > 0:
+        sWin.blit(aFig[4],(xd2 ,yd2))
+    if xd < xd2 and xd2 != -1:
+        xd += 1
+    if xd > xd2 and xd2 != -1:
+        xd += -1
+    if  xd == xd2 and yd > yd2:
+        yd += -1
+    if  xd == xd2 and yd < yd2:
+        yd += 1
+        return xd, yd
+
+#---------------------------------------------------------------------
+# Lectura de datos File Binario Estructurado
+#---------------------------------------------------------------------
+def GetData():
+    nFh.readinto(eReg) # Leemos el Registro completo de tipo eCelda
+    return eReg # lo devolvemos a quien lo pidio
+
+#---------------------------------------------------------------------
+# Main
+#---------------------------------------------------------------------
+eReg = eCelda() # Variable de tipo eCelda del Mapa
+nFh  = open('mapa.dat','rb') # Abrimos File Mode Lectura Binario Estructurado
+# Pintamos / Formateamos la salida de los datos a apantalla
+sLine = 'Tile: %02d Disp: %1d Show: %1d Fila: %02d Colu: %02d Recu: %1d Qty: %04d'
+for nReg in range(666): # Recorrimos el Archivo
+    eReg = GetData()    # 4.662 Bytes tamano mapa.dat / 7 Bytes = 666
+    # Imprimimos los datos de todas las celdas del mapa a pantalla (screen)
+    print(sLine %(eReg.nT,eReg.nD,eReg.nS,eReg.nF,eReg.nC,eReg.nR,eReg.nQ))
+nFh.close() # Matamos el File
 
 #--------------------------------------------------------------
 # Handle de Pause.-
@@ -267,11 +256,7 @@ def Pausa():
      e = PG.event.wait()
      if e.type in (PG.QUIT, PG.KEYDOWN):
         return
-def Cambio_inicio_Robot(position):
-    for i in range(0, nMAX_ROBOTS):
-        aBoe[i].nX = position[0]
-        aBoe[i].nY = position[1]
-    return
+
 #--------------------------------------------------------------
 # SaveData -> Graba todos los datos a un archivo binario
 #--------------------------------------------------------------
@@ -279,7 +264,7 @@ def SaveData():
     nFh = open('mapa.dat','wb') # Abrimos archivo Mode Binario Escritura
     for nF in range(0,nRES[1] / nT_HY):
      for nC in range(0,nRES[0] / nT_WX):
-         eReg = aMap[nF][nC] # Asignamos toda la Info Celda Mapa -> eReg
+         eReg = aMap[nF][nC]# Asignamos toda la Info Celda Mapa -> eReg
          nFh.write(eReg)     # Salvamos el registro completo al File
     nFh.close() # Cerramos y vaciamos el buffer RAM File
     return
@@ -313,22 +298,19 @@ while lGo:
 
  ev = PG.event.get()
  for e in ev:
-    if e.type == QUIT           : lGo = (2 > 3)
-    if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
-    if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
-         print("izquierdo")
-         cell_x = int(e.pos[0] / Tc) * Tc + Tc /13
-         cell_y = int(e.pos[1] / Tc) * Tc + Tc / 13
-         Cambio_inicio_Robot((cell_x, cell_y))
-    if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
-         print("derecho")
+  if e.type == QUIT           : lGo = (2 > 3)
+  if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
+  if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
+               xd, yd = Mov_Der(nMx, nMy)
+  if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
+               xd2, yd2 = Mov_Izq(nMx, nMy)
+
  Pinta_Mapa()
- Pinta_Robot()
- #Mueve_Robot()
+ Mueve_Robot()
+ Pinta_Robot(xd, yd)
  Pinta_Mouse()
+
  PG.display.flip()
  aClk[0].tick(100)
 
 PG.quit
-
-
