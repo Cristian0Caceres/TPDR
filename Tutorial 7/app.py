@@ -12,6 +12,7 @@
 #        \/           \/                    \/     \/
 #---------------------------------------------------------------------
 import pygame as PG, time as Ti, random as RA, ctypes as CT, matplotlib as MT
+import telepot as tp
 from pygame.locals import *
 
 #---------------------------------------------------------------------
@@ -21,6 +22,7 @@ nRES = (1184,576); nT_WX = nT_HY = 32 ; nMAX_ROBOTS = 01 ; lGo = True
 nMx  = 0 ; nMy = 0 ; nR_1 = 1154 ; nR_2 = 32 ; nBTN_LEFT = 1
 nBTN_RIGHT = 3 ; xd = -1 ; yd = -1 ; xd2 = -1 ; yd2 = -1
 coordenadas = {}
+#recursos={acero:0;cobre:0;litio:0;butano:0}
 #---------------------------------------------------------------------
 # Definicion Structura Robots
 #---------------------------------------------------------------------
@@ -268,7 +270,14 @@ def SaveData():
          nFh.write(eReg)     # Salvamos el registro completo al File
     nFh.close() # Cerramos y vaciamos el buffer RAM File
     return
-
+#Envia los recursos del Mapa donde esta el robot
+def Send_Data():
+    if aBoe[0].nX % 32 == 0:
+        if aBoe[0].nY % 32 == 0:
+            nF = aBoe[0].nY/32 ; nC = aBoe[0].nX/32
+            print(str((nF,nC)) + ' RR -> ' + str(aMap[nF][nC].nR))
+            MySer.write( 'F: ' + str(nF) + ' C: ' + str(nC) + ' RR ' + str(aMap[nF][nC].nR) + '\n')
+    return
 #---------------------------------------------------------------------
 # While Principal del Demo.-
 #---------------------------------------------------------------------
