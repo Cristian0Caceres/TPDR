@@ -11,18 +11,17 @@
 # |____|_  /\____/|___  /\____/|__| |__|\___  >____  /
 #        \/           \/                    \/     \/
 #---------------------------------------------------------------------
-import pygame as PG, time as Ti, random as RA, ctypes as CT, matplotlib as MT
-import telepot as tp
+import pygame as PG, time as Ti, random as RA, ctypes as CT
 from pygame.locals import *
-
+import matplotlib.pylab as mathplt
+import sys
+import numpy as npy
 #---------------------------------------------------------------------
 # Definicion de Constantes y Variables
 #---------------------------------------------------------------------
 nRES = (1184,576); nT_WX = nT_HY = 32 ; nMAX_ROBOTS = 01 ; lGo = True
-nMx  = 0 ; nMy = 0 ; nR_1 = 1154 ; nR_2 = 32 ; nBTN_LEFT = 1
-nBTN_RIGHT = 3 ; xd = -1 ; yd = -1 ; xd2 = -1 ; yd2 = -1
-coordenadas = {}
-#recursos={acero:0;cobre:0;litio:0;butano:0}
+nMx  = nMy = 0; nR_1 = 1154 ; nR_2 = 32 ; nBTN_LEFT = 1 ; nBTN_RIGHT = 3
+xd = -1 ; yd = -1 ; xd2 = -1 ; yd2 = -1
 #---------------------------------------------------------------------
 # Definicion Structura Robots
 #---------------------------------------------------------------------
@@ -57,6 +56,52 @@ class eCelda(CT.Structure):
              ('nQ',CT.c_ubyte)  # Cantidad del Recurso
             ]
 
+
+
+#---------------------------------------------------------------------
+# Lectura de datos File Binario Estructurado
+#---------------------------------------------------------------------
+def GetData():
+    nFh.readinto(eReg) # Leemos el Registro completo de tipo eCelda
+    return eReg # lo devolvemos a quien lo pidio
+
+#---------------------------------------------------------------------
+# Maain
+#---------------------------------------------------------------------
+eReg = eCelda() # Variable de tipo eCelda del Mapa
+nFh  = open('mapa.dat','rb') # Abrimos File Mode Lectura Binario Estructurado
+# Pintamos / Formateamos la salida de los datos a apantalla
+sLine = 'Tile: %02d Disp: %1d Show: %1d Fila: %02d Colu: %02d Recu: %1d Qty: %04d'
+for nReg in range(666): # Recorrimos el Archivo
+    eReg = GetData()    # 4.662 Bytes tamano mapa.dat / 7 Bytes = 666
+    # Imprimimos los datos de todas las celdas del mapa a pantalla (screen)
+    print(sLine %(eReg.nT,eReg.nD,eReg.nS,eReg.nF,eReg.nC,eReg.nR,eReg.nQ))
+
+# Graficos del telepot
+recursos = 0
+npy.random.seed(3)
+x = npy.arange(4)
+y = npy.random.uniform (2, 7, len(x))
+labels = ['Acero', 'Cobre', 'Litio', 'Gas']
+
+fig, ax = mathplt.subplots()
+
+ax.bar(x, y, width=0.5, edgecolor="white", linewidth=0.7)
+
+ax.set(xlim=(-0.5, len(x)-0.5), xticks=npy.arange(0,len(x), 50),
+       ylim=(0, 8), yticks=npy.arange(0, 8, 1))
+
+mathplt.xticks(x, labels)  # Establecer las etiquetas en el eje x
+mathplt.xlabel('Recursos')
+
+mathplt.title('Programacion Robot')
+
+mathplt.savefig('grafico.png')
+
+
+nFh.close() # Matamos el File
+
+
 #---------------------------------------------------------------------
 # Carga imagenes y convierte formato PyGame
 #---------------------------------------------------------------------
@@ -69,6 +114,8 @@ def Load_Image(sFile,transp = False):
        color = image.get_at((0,0))
        image.set_colorkey(color,RLEACCEL)
     return image
+#---------------------------------------------------------------------
+
 
 #---------------------------------------------------------------------
 # Inicializa PGs.-
@@ -78,6 +125,9 @@ def Init_PyGame():
     PG.mouse.set_visible(False)
     PG.display.set_caption(' Mapa Inteligente 2D Robotica - By Alberto Caro')
     return PG.display.set_mode(nRES)
+#=========================================================================
+inicio = None
+final = None
 
 #---------------------------------------------------------------------
 # Inicilaiza parametros de los Robots
@@ -94,6 +144,23 @@ def Init_Robot():
      aBoe[i].nV = 1
      aBoe[i].nC = 1
     return
+
+#---------------------------------------------------------------------
+# Inicilaiza parametros de los Robots
+#---------------------------------------------------------------------
+def Init_Robot_Random():
+    for i in range(0,nMAX_ROBOTS):
+     aBoe[i].nF = 1 # Robot Tipo 0
+     aBoe[i].nX = (RA.randint(0,nRES[0] - nT_WX) / nT_WX) * nT_WX
+     aBoe[i].nY = (RA.randint(0,nRES[1] - nT_HY) / nT_HY) * nT_HY
+     aBoe[i].nR = nR_1 - aBoe[i].nX
+     aBoe[i].nS = 1 # Switch por defecto
+     aBoe[i].dX = 1 # Por defecto robot Direccion Este.-
+     aBoe[i].dY = 0
+     aBoe[i].nV = 1
+     aBoe[i].nC = 1
+    return
+
 #---------------------------------------------------------------------
 # Inicializa Array de Sprites.-
 #---------------------------------------------------------------------
@@ -103,7 +170,7 @@ def Init_Fig():
     aImg.append(Load_Image('T02.png',False )) # Tile Roca,   id = 1
     aImg.append(Load_Image('T03.png',False )) # Tile Marmol, id = 2
     aImg.append(Load_Image('Bo1.png',True  )) # Robot 1      id = 3
-    aImg.append(Load_Image('Pun.png',True  )) # puntero      id = 4
+    aImg.append(Load_Image('Bo2.png',True  )) # Robot 2      id = 4
     aImg.append(Load_Image('Bo3.png',True  )) # Robot 3      id = 5
     aImg.append(Load_Image('Bo4.png',True  )) # Robot 4      id = 6
     aImg.append(Load_Image('Bo5.png',True  )) # Robot 5      id = 7
@@ -143,6 +210,9 @@ def Init_Mapa():
 # Pinta Mapa
 #---------------------------------------------------------------------
 def Pinta_Mapa():
+
+    recursos = [0, 0, 0, 0]
+
     for nF in range(0,nRES[1] / nT_HY):
      for nC in range(0,nRES[0] / nT_WX):
       if aMap[nF][nC].nT == 0: # Baldosa sin recursos
@@ -164,14 +234,15 @@ def Pinta_Mapa():
          if aMap[nF][nC].nS == 1: sWin.blit(aFig[16],(aMap[nF][nC].nC*nT_HY,aMap[nF][nC].nF*nT_WX)) # Baldosa con Gas Butano
          else: sWin.blit(aFig[02],(aMap[nF][nC].nC*nT_HY,aMap[nF][nC].nF*nT_WX)) # Baldosa sin RR
 
-    return
+    return recursos
+
 
 #---------------------------------------------------------------------
 # Modi Mapa
 #---------------------------------------------------------------------
 def Modi_Mapa(nTile,nOk):
-    for nF in range(0,nRES[1] / nT_HY):
-     for nC in range(0,nRES[0] / nT_WX):
+    for nF in range(0,nRES[1] // nT_HY):
+     for nC in range(0,nRES[0] // nT_WX):
       if aMap[nF][nC].nT == nTile:
          aMap[nF][nC].nS = nOk # Ahora este TILE se Pinta
     return
@@ -185,70 +256,62 @@ def Clear_Mapa(nVal):
     return                   # Activamos con UNO
 
 #---------------------------------------------------------------------
+# Pinta los Robots en el Super Extra Mega Mapa.-
+# Se pintan los Robots en Surface -> sMapa (6400 x 480)
+#---------------------------------------------------------------------
+
+
+def Pinta_Robot(xd, yd):
+    if xd >= 0 or yd > 0:
+        sWin.blit(aFig[3],(xd, yd))
+    return
+
+
+
+#=======================================================================
+
+def move_l(nMx,nMy):
+    xd = 0 ; yd = 0
+
+    xd = (nMx/nT_WX) * nT_WX
+    yd = (nMy/nT_HY) * nT_HY
+    return xd, yd
+
+
+def move_r(nMx,nMy):
+    xd2 = 0 ; yd2 = 0
+
+    xd2 = (nMx/nT_WX) * nT_WX
+    yd2 = (nMy/nT_HY) * nT_HY
+    return xd2, yd2
+
+
+#---------------------------------------------------------------------
+# Actualiza la estructura de datos de cada uno de los robots dentro del
+# Mapa sMapa.
+#---------------------------------------------------------------------
+def Mueve_Robot():
+    global xd, xd2, yd, yd2
+
+    if xd < xd2 and xd2 != -1:
+        xd += 1
+    if xd > xd2 and xd2 != -1:
+        xd += -1
+    if xd == xd2 and yd > yd2:
+        yd += -1
+    if xd == xd2 and yd < yd2:
+        yd += 1
+
+        return xd, yd
+#===========================================================================
+
+
+#---------------------------------------------------------------------
 # Pinta Mouse
 #---------------------------------------------------------------------
 def Pinta_Mouse():
     sWin.blit(aFig[11],(nMx,nMy))
     return
-#---------------------------------------------------------------------
-# actualiza coordenadas click izquierdo y derecho del mouse
-#---------------------------------------------------------------------
-def Mov_Der(nMx,nMy):
-    xd = 0 ; yd = 0
-
-    xd = (nMx / nT_WX) * nT_WX
-    yd = (nMy / nT_HY) * nT_HY
-    return xd, yd
-#---------------------------------------------------------------------
-def Mov_Izq(nMx,nMy):
-    xd2 = 0 ; yd2 = 0
-
-    xd2 = (nMx / nT_WX) * nT_WX
-    yd2 = (nMy / nT_HY) * nT_HY
-    return xd2, yd2
-#---------------------------------------------------------------------
-# Pinta Robot
-#---------------------------------------------------------------------
-def Pinta_Robot(xd, yd):
-    if xd >= 0 or yd >= 0:
-        sWin.blit(aFig[3],(xd,yd))
-    return
-#---------------------------------------------------------------------
-# Mueve Robot
-#---------------------------------------------------------------------
-def Mueve_Robot():
-    global xd, xd2, yd, yd2
-    if xd2 > 0 or yd2 > 0:
-        sWin.blit(aFig[4],(xd2 ,yd2))
-    if xd < xd2 and xd2 != -1:
-        xd += 1
-    if xd > xd2 and xd2 != -1:
-        xd += -1
-    if  xd == xd2 and yd > yd2:
-        yd += -1
-    if  xd == xd2 and yd < yd2:
-        yd += 1
-        return xd, yd
-
-#---------------------------------------------------------------------
-# Lectura de datos File Binario Estructurado
-#---------------------------------------------------------------------
-def GetData():
-    nFh.readinto(eReg) # Leemos el Registro completo de tipo eCelda
-    return eReg # lo devolvemos a quien lo pidio
-
-#---------------------------------------------------------------------
-# Main
-#---------------------------------------------------------------------
-eReg = eCelda() # Variable de tipo eCelda del Mapa
-nFh  = open('mapa.dat','rb') # Abrimos File Mode Lectura Binario Estructurado
-# Pintamos / Formateamos la salida de los datos a apantalla
-sLine = 'Tile: %02d Disp: %1d Show: %1d Fila: %02d Colu: %02d Recu: %1d Qty: %04d'
-for nReg in range(666): # Recorrimos el Archivo
-    eReg = GetData()    # 4.662 Bytes tamano mapa.dat / 7 Bytes = 666
-    # Imprimimos los datos de todas las celdas del mapa a pantalla (screen)
-    print(sLine %(eReg.nT,eReg.nD,eReg.nS,eReg.nF,eReg.nC,eReg.nR,eReg.nQ))
-nFh.close() # Matamos el File
 
 #--------------------------------------------------------------
 # Handle de Pause.-
@@ -266,18 +329,29 @@ def SaveData():
     nFh = open('mapa.dat','wb') # Abrimos archivo Mode Binario Escritura
     for nF in range(0,nRES[1] / nT_HY):
      for nC in range(0,nRES[0] / nT_WX):
-         eReg = aMap[nF][nC]# Asignamos toda la Info Celda Mapa -> eReg
+         eReg = aMap[nF][nC] # Asignamos toda la Info Celda Mapa -> eReg
          nFh.write(eReg)     # Salvamos el registro completo al File
     nFh.close() # Cerramos y vaciamos el buffer RAM File
     return
-#Envia los recursos del Mapa donde esta el robot
-def Send_Data():
-    if aBoe[0].nX % 32 == 0:
-        if aBoe[0].nY % 32 == 0:
-            nF = aBoe[0].nY/32 ; nC = aBoe[0].nX/32
-            print(str((nF,nC)) + ' RR -> ' + str(aMap[nF][nC].nR))
-            MySer.write( 'F: ' + str(nF) + ' C: ' + str(nC) + ' RR ' + str(aMap[nF][nC].nR) + '\n')
-    return
+#===========================================================================
+def Min_Obtenidos():
+    for i in range(0,nMAX_ROBOTS):
+        nCeldaX = aBoe[i].nX // nT_WX
+        nCeldaY = aBoe[i].nY // nT_HY
+        if aMap[nCeldaY][nCeldaX].nS == 1:
+            nRecurso = aMap[nCeldaY][nCeldaX].nR
+            print("El robot ha obtenido el mineral:", nRecurso)
+            aMap[nCeldaY][nCeldaX].nS = 0  # Desactiva el recurso para que no se vuelva a imprimir
+#================================================================================================
+
+
+
+
+#=============================================================================
+
+with open('mapa.dat') as mapa:
+    print(data.split[0] for data in mapa)
+
 #---------------------------------------------------------------------
 # While Principal del Demo.-
 #---------------------------------------------------------------------
@@ -305,20 +379,22 @@ while lGo:
  if cKey[PG.K_F6] : Clear_Mapa(0)  # Limpiapos Mapa
  if cKey[PG.K_F7] : SaveData()     # Salvamos el mapa entero a mapa.dat
 
+
  ev = PG.event.get()
  for e in ev:
   if e.type == QUIT           : lGo = (2 > 3)
   if e.type == PG.MOUSEMOTION : nMx,nMy = e.pos
   if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_LEFT:
-               xd, yd = Mov_Der(nMx, nMy)
+      xd, yd = move_r(nMx,nMy)
   if e.type == PG.MOUSEBUTTONDOWN and e.button == nBTN_RIGHT:
-               xd2, yd2 = Mov_Izq(nMx, nMy)
+      xd2, yd2 = move_l(nMx,nMy)
+
 
  Pinta_Mapa()
- Mueve_Robot()
  Pinta_Robot(xd, yd)
+ Mueve_Robot()
  Pinta_Mouse()
-
+ Min_Obtenidos()
  PG.display.flip()
  aClk[0].tick(100)
 
